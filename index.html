@@ -618,16 +618,35 @@
   <p>© 2026 Brand Mechanic . All rights reserved.</p>
   <p style="color:#4a5568;font-size:0.75rem">Revenue Architecture. Engineered.</p>
 </footer>
-
 <script>
-function handleSubmit(){
-  var email=document.getElementById('femail').value.trim();
-  if(!email||!email.includes('@')){
+async function handleSubmit() {
+  const email = document.getElementById('femail').value.trim();
+  const fname = document.getElementById('fname').value.trim();
+
+  if (!email || !email.includes('@')) {
     document.getElementById('femail').focus();
     return;
   }
-  document.getElementById('form-fields').style.display='none';
-  document.getElementById('form-success').style.display='block';
+
+  try {
+    const response = await fetch(`https://app.convertkit.com/forms/506a3c9d63/subscriptions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email_address: email,
+        first_name: fname
+      })
+    });
+
+    if (response.ok) {
+      document.getElementById('form-fields').style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+    } else {
+      alert('Something went wrong. Please try again.');
+    }
+  } catch (err) {
+    alert('Something went wrong. Please try again.');
+  }
 }
 </script>
 </body>
